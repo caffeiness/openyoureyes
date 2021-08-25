@@ -1,13 +1,25 @@
 import os,sys
 import cv2
 import time
+# ビープ音の再生
+import winsound
 from playsound import playsound
+from pydub import AudioSegment
+from pydub.playback import play
+
 
 cap = cv2.VideoCapture(1)
 cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml')
 start_time = time.time()
 end_time = time.time()
+
+
+def upload(find):
+    if find:
+        winsound.PlaySound("metalgearBGM.mp3", winsound.SND_ALIAS)
+    else:
+        winsound.PlaySound("cat.wav", winsound.SND_ALIAS)
 
 while True:
     ret, rgb = cap.read()
@@ -31,7 +43,9 @@ while True:
             #print(end_time-start_time)
             if end_time-start_time >= 5:
                 cv2.putText(rgb,"Sleepy eyes. Wake up!",(10,100), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,255), 2, cv2.LINE_AA)
-                #playsound("metalgearBGM.mp3")
+                #upload(True)
+                #winsound.PlaySound("metalgearBGM.mp3")
+                winsound.Beep(1000, 100) # 1000Hzのビープを100ms再生
         elif len(eyes) > 0:
             start_time = end_time 
 
